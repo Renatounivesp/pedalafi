@@ -3,22 +3,57 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Phone, Zap, ChevronRight } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (phone.length < 10) return;
     
     setLoading(true);
-    // Simulate auth
-    setTimeout(() => {
+    
+    try {
+      // 1. Check if profile exists
+      const { data: profile, error: fetchError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('phone', phone)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+
+      let userId = profile?.id;
+
+      // 2. If not, create it
+      if (!profile) {
+        const { data: newProfile, error: insertError } = await supabase
+          .from('profiles')
+          .insert([{ phone, name: `Piloto ${phone.slice(-4)}` }])
+          .select()
+          .single();
+        
+        if (insertError) throw insertError;
+        userId = newProfile.id;
+      }
+
+      // 3. Store auth state
       localStorage.setItem("pedalafi_auth", "true");
+      localStorage.setItem("pedalafi_user_id", userId);
+      localStorage.setItem("pedalafi_phone", phone);
+
       router.push("/mode-selection");
-    }, 1000);
+    } catch (err) {
+      console.error("Erro na autenticação:", err);
+      alert("Houve um erro ao conectar com o satélite. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

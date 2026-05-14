@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { Navigation, MapPin, Compass, ShieldAlert } from "lucide-react";
+import { Navigation, MapPin, Compass, ShieldAlert, Zap } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const Map = dynamic(() => import("@/components/map/Map"), {
@@ -117,6 +118,37 @@ export default function GPSPage() {
           <span className="text-[10px] font-black uppercase tracking-widest">Protocolo SOS</span>
         </button>
       </div>
+
+      {/* Save Button (Conditional) */}
+      {route.length > 5 && (
+        <div className="absolute bottom-24 left-4 right-4 z-20 flex justify-center animate-in fade-in slide-in-from-bottom-2">
+          <button 
+            className="bg-primary text-black px-8 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-[0_0_30px_rgba(0,242,255,0.4)] active:scale-95 transition-all flex items-center gap-2"
+            onClick={async () => {
+              const userId = localStorage.getItem("pedalafi_user_id");
+              if (!userId) return;
+              
+              const { error } = await supabase.from('exploration_logs').insert([{
+                pilot_id: userId,
+                km: distance,
+                duration: formatTime(time),
+                path: route
+              }]);
+              
+              if (error) alert("Erro ao salvar no arquivo.");
+              else {
+                alert("Exploração arquivada com sucesso!");
+                setRoute([]);
+                setDistance(0);
+                setTime(0);
+              }
+            }}
+          >
+            <Zap size={14} className="fill-black" />
+            Arquivar Trajeto
+          </button>
+        </div>
+      )}
 
       {/* Map Attribution / Safe Watermark */}
       <div className="absolute bottom-2 right-4 z-20 opacity-30">
