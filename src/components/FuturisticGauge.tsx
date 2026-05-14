@@ -9,7 +9,7 @@ interface GaugeProps {
   unit: string;
   color?: string;
   size?: number;
-  style?: "arc" | "digital" | "radial" | "minimal";
+  style?: "arc" | "digital" | "radial" | "minimal" | "racing" | "classic";
 }
 
 export default function FuturisticGauge({
