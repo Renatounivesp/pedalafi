@@ -48,9 +48,9 @@ export default function LoginPage() {
       localStorage.setItem("pedalafi_phone", phone);
 
       router.push("/mode-selection");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Erro na autenticação:", err);
-      alert("Houve um erro ao conectar com o satélite. Tente novamente.");
+      alert(`ERRO DE TELEMETRIA: ${err.message || "Erro desconhecido"}`);
     } finally {
       setLoading(false);
     }
