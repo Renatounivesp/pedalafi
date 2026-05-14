@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Phone, Zap, ChevronRight } from "lucide-react";
+import { Phone, Gauge, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
@@ -65,7 +65,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm space-y-12">
         <header className="flex flex-col items-center text-center space-y-4">
           <div className="w-20 h-20 glass rounded-3xl flex items-center justify-center border-primary/30 shadow-[0_0_30px_rgba(0,242,255,0.2)]">
-            <Zap className="text-primary fill-primary size-10 animate-pulse" />
+            <Gauge className="text-primary size-10 animate-pulse" />
           </div>
           <div className="space-y-1">
             <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase">
@@ -111,9 +111,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <footer className="text-center">
+        <footer className="text-center opacity-0 pointer-events-none">
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
-            Acesso Restrito ao Sistema de Entrega
+            Hardware UI v2.4
           </p>
         </footer>
       </div>

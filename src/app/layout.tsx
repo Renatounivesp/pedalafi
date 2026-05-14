@@ -9,13 +9,28 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pedalafi",
-  description: "Painel inteligente para entregadores acompanharem rotas e desempenho.",
+  title: "Pedalafi Pro | Telemetria de Alta Performance",
+  description: "Velocímetro profissional com HUD cyberpunk, rastreamento GPS e telemetria avançada para ciclistas.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
+  openGraph: {
+    title: "Pedalafi Pro",
+    description: "Velocímetro profissional com HUD cyberpunk e telemetria avançada.",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pedalafi Pro",
+    description: "Velocímetro profissional com HUD cyberpunk.",
+    images: ["/og-image.png"],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Pedalafi",
+    title: "Pedalafi Pro",
   },
 };
 

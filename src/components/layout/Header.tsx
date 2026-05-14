@@ -1,4 +1,4 @@
-import { Zap, Menu, Bell } from "lucide-react";
+import { Gauge, Menu, Bell } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
@@ -22,7 +22,7 @@ export default function Header() {
             className="w-8 h-8 rounded-full border border-primary/30 p-0.5 overflow-hidden"
           >
             <div className="w-full h-full bg-primary/20 rounded-full flex items-center justify-center">
-              <Zap size={14} className="text-primary fill-primary" />
+              <Gauge size={14} className="text-primary" />
             </div>
           </Link>
         </div>
