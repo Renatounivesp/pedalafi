@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Pedalafi Pro | Telemetria de Alta Performance",
-  description: "Velocímetro profissional com HUD cyberpunk, rastreamento GPS e telemetria avançada para ciclistas.",
+  description: "Velocímetro profissional para entregadores Bikers. HUD cyberpunk e telemetria avançada.",
   manifest: "/manifest.json",
   icons: {
     icon: "/icon.png",
@@ -18,13 +18,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Pedalafi Pro",
-    description: "Velocímetro profissional com HUD cyberpunk e telemetria avançada.",
+    description: "Velocímetro profissional para entregadores Bikers.",
     images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Pedalafi Pro",
-    description: "Velocímetro profissional com HUD cyberpunk.",
+    description: "Velocímetro profissional para entregadores Bikers.",
     images: ["/og-image.png"],
   },
   appleWebApp: {
