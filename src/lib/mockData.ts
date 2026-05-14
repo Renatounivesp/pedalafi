@@ -1,12 +1,12 @@
 export const mockUser = {
-  id: "PLT-042-X",
-  name: "Renato Operador",
+  id: "PLT-000-X",
+  name: "Operador",
   city: "São Paulo, SP",
-  vehicle: "Bike Elétrica",
-  level: "Especialista",
+  vehicle: "Equipamento",
+  level: "Recruta",
   dailyGoalKm: 60,
-  isPremium: true,
-  avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+  isPremium: false,
+  avatar: "https://i.pravatar.cc/150?u=placeholder",
 };
 
 export const mockTodayStats = {

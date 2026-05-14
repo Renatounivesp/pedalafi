@@ -3,6 +3,8 @@ CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   phone TEXT UNIQUE NOT NULL,
   name TEXT,
+  vehicle TEXT,
+  is_premium BOOLEAN DEFAULT FALSE,
   level TEXT DEFAULT 'Recruta',
   total_km FLOAT DEFAULT 0,
   xp INTEGER DEFAULT 0,
