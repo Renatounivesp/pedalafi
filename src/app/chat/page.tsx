@@ -11,6 +11,7 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -29,17 +30,31 @@ export default function ChatPage() {
 
     // Initial fetch
     const fetchMessages = async () => {
-      const { data, error } = await supabase
-        .from('chat_messages')
-        .select('*, profiles(name, vehicle)')
-        .order('created_at', { ascending: true })
-        .limit(50);
+      try {
+        const { data, error: fetchError } = await supabase
+          .from('chat_messages')
+          .select('*, profiles(name, vehicle)')
+          .order('created_at', { ascending: true })
+          .limit(50);
 
-      if (!error && data) {
-        setMessages(data);
+        if (fetchError) {
+          if (fetchError.code === '42P01') {
+            setError("Tabela 'chat_messages' não encontrada. Verifique se rodou o SQL no Supabase.");
+          } else {
+            setError(`Erro ao carregar mensagens: ${fetchError.message}`);
+          }
+          throw fetchError;
+        }
+        
+        if (data) {
+          setMessages(data);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar perfil:", err);
+      } finally {
+        setLoading(false);
+        setTimeout(scrollToBottom, 100);
       }
-      setLoading(false);
-      setTimeout(scrollToBottom, 100);
     };
 
     fetchMessages();
@@ -52,7 +67,7 @@ export default function ChatPage() {
         schema: 'public', 
         table: 'chat_messages' 
       }, async (payload) => {
-        // Fetch the sender info for the new message
+        console.log("Nova mensagem recebida via Realtime:", payload);
         const { data: senderData } = await supabase
           .from('profiles')
           .select('name, vehicle')
@@ -67,7 +82,9 @@ export default function ChatPage() {
         setMessages((prev) => [...prev, fullMessage]);
         setTimeout(scrollToBottom, 100);
       })
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Status da conexão Realtime:", status);
+      });
 
     return () => {
       supabase.removeChannel(channel);
@@ -82,17 +99,17 @@ export default function ChatPage() {
     setNewMessage("");
 
     try {
-      const { error } = await supabase
+      const { error: sendError } = await supabase
         .from('chat_messages')
         .insert([{ 
           sender_id: userId, 
           content: messageContent 
         }]);
 
-      if (error) throw error;
-    } catch (err) {
+      if (sendError) throw sendError;
+    } catch (err: any) {
       console.error("Erro ao enviar mensagem:", err);
-      alert("Falha no envio da mensagem.");
+      alert(`Falha no envio: ${err.message}`);
     }
   };
 
@@ -106,7 +123,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] animate-in fade-in duration-500">
+    <div className="flex flex-col h-[calc(100vh-140px)] animate-in fade-in duration-500 overflow-hidden">
       {/* Chat Header */}
       <header className="p-4 flex items-center justify-between border-b border-white/5 glass sticky top-0 z-10 mx-4 mt-2 rounded-2xl">
         <div className="flex items-center gap-3">
@@ -114,22 +131,37 @@ export default function ChatPage() {
             <Radio className="text-primary animate-pulse" size={18} />
           </div>
           <div>
-            <h2 className="text-sm font-black italic text-white uppercase tracking-tight">Rádio Frequência Global</h2>
+            <h2 className="text-sm font-black italic text-white uppercase tracking-tight">Rádio Global</h2>
             <div className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
-              <p className="text-[8px] text-muted-foreground uppercase tracking-widest">Protocolo Seguro Ativo</p>
+              <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${error ? 'bg-red-500' : 'bg-success'}`} />
+              <p className="text-[8px] text-muted-foreground uppercase tracking-widest">
+                {error ? "Falha na Conexão" : "Canal Seguro Ativo"}
+              </p>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <div className="px-2 py-1 bg-white/5 rounded-md border border-white/10">
-             <span className="text-[8px] font-mono text-primary uppercase">32 On-line</span>
+             <span className="text-[8px] font-mono text-primary uppercase tracking-tighter italic">Sinal: Estável</span>
           </div>
         </div>
       </header>
 
+      {/* Error Message */}
+      {error && (
+        <div className="mx-4 mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+          <p className="text-[10px] text-red-500 font-bold uppercase text-center">{error}</p>
+        </div>
+      )}
+
       {/* Messages List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
+        {messages.length === 0 && !error && (
+          <div className="flex flex-col items-center justify-center h-full opacity-30">
+            <Radio size={48} className="mb-2" />
+            <p className="text-[10px] font-bold uppercase tracking-widest">Nenhuma transmissão captada...</p>
+          </div>
+        )}
         {messages.map((msg, index) => {
           const isMe = msg.sender_id === userId;
           const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
