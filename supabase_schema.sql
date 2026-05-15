@@ -21,3 +21,14 @@ CREATE TABLE IF NOT EXISTS exploration_logs (
   path JSONB, -- Array of coordinates [[lat, lng], ...]
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
+
+-- Table for Chat Messages
+CREATE TABLE IF NOT EXISTS chat_messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  sender_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- Enable Realtime for chat (this line might fail if publication already exists, use with caution)
+-- ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;

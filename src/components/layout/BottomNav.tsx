@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Map as MapIcon, History, User } from "lucide-react";
+import { LayoutDashboard, Map as MapIcon, History, User, MessageSquare } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -12,6 +12,7 @@ function cn(...inputs: ClassValue[]) {
 
 const navItems = [
   { href: "/", label: "PAINEL", icon: LayoutDashboard },
+  { href: "/chat", label: "CONVERSA", icon: MessageSquare },
   { href: "/gps", label: "MAPA", icon: MapIcon },
   { href: "/historico", label: "ARQUIVO", icon: History },
   { href: "/perfil", label: "PILOTO", icon: User },
