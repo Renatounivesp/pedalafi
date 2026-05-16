@@ -46,8 +46,9 @@ export default function Dashboard() {
         <div>
           <h1 className="text-2xl font-black italic tracking-tighter text-white uppercase flex items-center gap-2">
             <Zap className="text-primary fill-primary size-5" style={{ color: activeColor }} />
-            PEDAL<span className="text-white">AFÍ</span>
+            PEDAL<span className="text-white">AFÍ</span> <span className="text-[10px] bg-primary/20 px-1 rounded">CRG EDITION</span>
           </h1>
+          {/* v1.0.1-crg */}
           <p className="text-[9px] font-mono text-muted-foreground uppercase tracking-[0.2em]">Rec Mode: active</p>
         </div>
         <div className="flex flex-col items-end gap-1">
