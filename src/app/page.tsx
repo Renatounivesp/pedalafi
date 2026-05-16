@@ -11,7 +11,7 @@ export default function Dashboard() {
   const router = useRouter();
   const [currentSpeed, setCurrentSpeed] = useState(0);
   const [activeColor, setActiveColor] = useState("#00f2ff"); // Cyan default
-  const [gaugeStyle, setGaugeStyle] = useState<"arc" | "digital" | "radial" | "minimal" | "racing" | "classic">("arc");
+  const [gaugeStyle, setGaugeStyle] = useState<"arc" | "digital" | "radial" | "minimal" | "racing" | "classic" | "crg">("arc");
 
   const colors = [
     { name: "Cyan", value: "#00f2ff" },
@@ -20,7 +20,7 @@ export default function Dashboard() {
     { name: "Yellow", value: "#fffb00" },
   ];
 
-  const styles = ["arc", "digital", "radial", "minimal", "racing", "classic"] as const;
+  const styles = ["arc", "digital", "radial", "minimal", "racing", "classic", "crg"] as const;
 
   useEffect(() => {
     const isAuth = localStorage.getItem("pedalafi_auth");

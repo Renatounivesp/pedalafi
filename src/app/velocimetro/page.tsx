@@ -14,7 +14,7 @@ const COLORS = [
   { name: "Gold", value: "#ffcc00" },
 ];
 
-const STYLES = ["arc", "digital", "radial", "minimal"] as const;
+const STYLES = ["arc", "digital", "radial", "minimal", "racing", "classic", "crg"] as const;
 
 export default function VelocimetroOnly() {
   const router = useRouter();
