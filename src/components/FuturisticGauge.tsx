@@ -10,6 +10,7 @@ interface GaugeProps {
   color?: string;
   size?: number;
   style?: "arc" | "digital" | "radial" | "minimal" | "racing" | "classic" | "crg";
+  odometer?: number;
 }
 
 export default function FuturisticGauge({
@@ -20,6 +21,7 @@ export default function FuturisticGauge({
   color = "#00f2ff",
   size = 200,
   style = "arc",
+  odometer = 0,
 }: GaugeProps) {
   const radius = size * 0.4;
   const strokeWidth = size * 0.05;
@@ -283,7 +285,7 @@ export default function FuturisticGauge({
             </div>
             <div className="mt-1 pt-1 border-t border-white/5 w-full flex justify-center">
                <span className="text-[7px] font-mono text-muted-foreground tracking-widest">
-                ODO <span className="text-white">123456</span> KM
+                ODO <span className="text-white">{odometer.toFixed(1).padStart(8, '0')}</span> KM
               </span>
             </div>
           </div>
